@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 import Root from "@/app/components/Root";
 import Home from "@/app/pages/Home";
 import MyCattle from "@/app/pages/MyCattle";
@@ -39,7 +39,15 @@ export const router = createBrowserRouter([
     Component: PrivacyPolicy,
   },
   {
+    path: "/privacy-policy",
+    Component: PrivacyPolicy,
+  },
+  {
     path: "/help",
+    Component: HelpSupport,
+  },
+  {
+    path: "/help-support",
     Component: HelpSupport,
   },
 ]);

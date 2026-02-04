@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Mic, MicOff, X, Volume2, Send } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function AIAssistant() {

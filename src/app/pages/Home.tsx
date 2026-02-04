@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { Mic, Camera, Activity, MessageCircle, ChevronDown, Shield, Zap, Globe, Award } from "lucide-react";
 import logo from "figma:asset/4aae9a3de90b79b2f73f4c31057de1676862c3e8.png";
 import heroImage from "figma:asset/e3836e90ab8ba577aa89a9da54bc1a115fed4c31.png";
@@ -149,11 +149,11 @@ export default function Home() {
 
           <div className="border-t border-gray-200 pt-4">
             <div className="flex justify-center gap-6 text-xs text-gray-600 mb-3">
-              <button onClick={() => navigate("/help-support")} className="hover:text-[#2D5A27]">
+              <button onClick={() => navigate("/help")} className="hover:text-[#2D5A27]">
                 Help & Support
               </button>
               <span>•</span>
-              <button onClick={() => navigate("/privacy-policy")} className="hover:text-[#2D5A27]">
+              <button onClick={() => navigate("/privacy")} className="hover:text-[#2D5A27]">
                 Privacy Policy
               </button>
             </div>

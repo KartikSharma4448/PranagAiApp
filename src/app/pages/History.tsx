@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSearchParams, useNavigate } from "react-router";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, Calendar, TrendingUp, AlertCircle, CheckCircle, Volume2, Download, FileText } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 

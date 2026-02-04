@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Camera as CameraIcon, Mic, Activity, ScanLine, X, Circle, Volume2 } from "lucide-react";
 
 type CameraMode = "muzzle" | "spatial" | "audio" | "general";

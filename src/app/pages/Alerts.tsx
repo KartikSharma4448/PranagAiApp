@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { AlertTriangle, AlertCircle, CheckCircle, Clock, ChevronRight } from "lucide-react";
 
 interface Alert {

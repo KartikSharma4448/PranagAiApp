@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { Plus, ChevronRight, Activity, Calendar, MapPin, Trash2, AlertTriangle, Camera, Bell } from "lucide-react";
 import { useState } from "react";
 

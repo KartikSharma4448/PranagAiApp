@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Home, Beef, Bell, User } from "lucide-react";
 import ProtectedRoute from "@/app/components/ProtectedRoute";
 import { Toaster } from "sonner";

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Globe, Wifi, WifiOff, Volume2, Bell, Moon, Smartphone, ShieldCheck, HelpCircle, ChevronRight, Check } from "lucide-react";
 import { Switch } from "@/app/components/ui/switch";
 import { useSettings } from "@/contexts/SettingsContext";

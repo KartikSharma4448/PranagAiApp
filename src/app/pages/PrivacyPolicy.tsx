@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ShieldCheck, Lock, Eye, Database, FileText, Globe } from "lucide-react";
 
 export default function PrivacyPolicy() {

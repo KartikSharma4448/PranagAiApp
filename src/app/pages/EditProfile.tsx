@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { ChevronLeft, User, MapPin, Phone, Mail, Save } from "lucide-react";
 import { updateProfile } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";

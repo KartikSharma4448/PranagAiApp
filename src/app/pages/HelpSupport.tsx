@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { ChevronLeft, HelpCircle, Phone, Mail, MessageCircle, Book, Video, ChevronDown, Volume2 } from "lucide-react";
 
 export default function HelpSupport() {
