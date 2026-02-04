@@ -3,6 +3,9 @@ import { Settings, User, MapPin, Phone, Mail, ChevronRight, Award, Smartphone, L
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { getProfile, getCattle, getScans } from "@/utils/api";
+import { useSettings } from "@/contexts/SettingsContext";
+import { getTranslations, type LanguageCode } from "@/utils/translations";
+import logo from "figma:asset/4aae9a3de90b79b2f73f4c31057de1676862c3e8.png";
 
 // Mock data to match My Cattle page
 const mockCattleCount = 4;
@@ -13,6 +16,8 @@ const mockTotalAlerts = 3; // Total alerts across all cattle
 export default function Profile() {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { darkMode, selectedLanguage } = useSettings();
+  const t = getTranslations(selectedLanguage as LanguageCode);
   const [profile, setProfile] = useState<any>(null);
   const [stats, setStats] = useState({ cattle: mockCattleCount, scans: 12, alerts: mockTotalAlerts });
   const [loading, setLoading] = useState(true);
@@ -75,7 +80,7 @@ export default function Profile() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F9F8F4]">
+    <div className={`min-h-screen pb-24 ${darkMode ? 'bg-gray-900' : 'bg-[#F9F8F4]'} transition-colors`}>
       {/* Header */}
       <header className="bg-gradient-to-br from-[#2D5A27] to-[#3d7a35] text-white">
         <div className="max-w-lg mx-auto px-6 py-8">
@@ -121,41 +126,41 @@ export default function Profile() {
       {/* Stats Cards */}
       <div className="max-w-lg mx-auto px-6 -mt-6 mb-6">
         <div className="grid grid-cols-3 gap-3">
-          <div className="bg-white rounded-2xl p-4 shadow-lg">
-            <div className="text-2xl font-bold text-[#2D5A27]">{stats.cattle}</div>
-            <div className="text-xs text-gray-600 mt-1">Cattle</div>
+          <div className={`rounded-2xl p-4 shadow-lg ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`text-2xl font-bold ${darkMode ? 'text-green-400' : 'text-[#2D5A27]'}`}>{stats.cattle}</div>
+            <div className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{t.profile.cattle}</div>
           </div>
-          <div className="bg-white rounded-2xl p-4 shadow-lg">
-            <div className="text-2xl font-bold text-[#BFA34B]">{stats.scans}</div>
-            <div className="text-xs text-gray-600 mt-1">Health Scans</div>
+          <div className={`rounded-2xl p-4 shadow-lg ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`text-2xl font-bold ${darkMode ? 'text-yellow-400' : 'text-[#BFA34B]'}`}>{stats.scans}</div>
+            <div className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{t.profile.healthScans}</div>
           </div>
-          <div className="bg-white rounded-2xl p-4 shadow-lg">
-            <div className="text-2xl font-bold text-blue-600">{stats.alerts}</div>
-            <div className="text-xs text-gray-600 mt-1">Early Alerts</div>
+          <div className={`rounded-2xl p-4 shadow-lg ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+            <div className={`text-2xl font-bold ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>{stats.alerts}</div>
+            <div className={`text-xs mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{t.profile.alerts || "Early Alerts"}</div>
           </div>
         </div>
       </div>
 
       {/* Contact Info */}
       <div className="max-w-lg mx-auto px-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Contact Information</h2>
-        <div className="bg-white rounded-2xl shadow-md p-5">
+        <h2 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Contact Information</h2>
+        <div className={`rounded-2xl shadow-md p-5 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <MapPin size={20} className="text-gray-400" />
-              <span className="text-sm text-gray-700">
+              <MapPin size={20} className={darkMode ? 'text-gray-500' : 'text-gray-400'} />
+              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 {loading ? "Loading..." : (profile?.location || "Not provided")}
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <Phone size={20} className="text-gray-400" />
-              <span className="text-sm text-gray-700">
+              <Phone size={20} className={darkMode ? 'text-gray-500' : 'text-gray-400'} />
+              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 {loading ? "Loading..." : (profile?.phone || user?.phone || "Not provided")}
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <Mail size={20} className="text-gray-400" />
-              <span className="text-sm text-gray-700">
+              <Mail size={20} className={darkMode ? 'text-gray-500' : 'text-gray-400'} />
+              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
                 {loading ? "Loading..." : (user?.email || "Not provided")}
               </span>
             </div>
@@ -165,26 +170,28 @@ export default function Profile() {
 
       {/* Menu Items */}
       <div className="max-w-lg mx-auto px-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">More Options</h2>
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+        <h2 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>More Options</h2>
+        <div className={`rounded-2xl shadow-md overflow-hidden ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
           {menuItems.map((item, index) => {
             const Icon = item.icon;
             return (
               <button
                 key={index}
                 onClick={() => navigate(item.path)}
-                className={`w-full px-5 py-4 flex items-center gap-4 hover:bg-gray-50 transition-all ${
-                  index < menuItems.length - 1 ? "border-b border-gray-100" : ""
+                className={`w-full px-5 py-4 flex items-center gap-4 transition-all ${
+                  darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                } ${
+                  index < menuItems.length - 1 ? darkMode ? "border-b border-gray-700" : "border-b border-gray-100" : ""
                 }`}
               >
-                <div className={`p-2 bg-gray-50 rounded-lg ${item.color}`}>
+                <div className={`p-2 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'} ${item.color}`}>
                   <Icon size={24} />
                 </div>
                 <div className="flex-1 text-left">
-                  <div className="font-semibold text-gray-900">{item.label}</div>
-                  <div className="text-xs text-gray-600">{item.description}</div>
+                  <div className={`font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{item.label}</div>
+                  <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{item.description}</div>
                 </div>
-                <ChevronRight size={20} className="text-gray-400" />
+                <ChevronRight size={20} className={darkMode ? 'text-gray-500' : 'text-gray-400'} />
               </button>
             );
           })}
@@ -193,17 +200,16 @@ export default function Profile() {
 
       {/* App Info */}
       <div className="max-w-lg mx-auto px-6 mb-6">
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-5 border border-green-200">
+        <div className={`rounded-2xl p-5 border ${
+          darkMode ? 'bg-gray-800 border-gray-700' : 'bg-gradient-to-br from-green-50 to-green-100 border-green-200'
+        }`}>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-12 h-12 bg-[#2D5A27] rounded-lg flex items-center justify-center">
-              <span className="text-white text-xl">🐂</span>
-            </div>
+            <img src={logo} alt="PRANA-G AI" className="h-8 w-30 rounded-lg" />
             <div>
-              <div className="font-bold text-[#2D5A27]">PRANA-G AI</div>
-              <div className="text-xs text-gray-600">Version 1.0.0</div>
+              <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Version 1.0.0</div>
             </div>
           </div>
-          <p className="text-sm text-gray-700">
+          <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
             Hardware-less DeepTech livestock health monitoring powered by AI. 
             Zero collars, zero tags - just your smartphone.
           </p>
@@ -212,24 +218,24 @@ export default function Profile() {
 
       {/* Hardware-less Badge */}
       <div className="max-w-lg mx-auto px-6 pb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Your Device Capabilities</h2>
-        <div className="bg-white rounded-2xl shadow-md p-5">
+        <h2 className={`text-lg font-semibold mb-3 ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>Your Device Capabilities</h2>
+        <div className={`rounded-2xl shadow-md p-5 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">Muzzle-ID Recognition</span>
-              <span className="text-green-600 text-sm font-semibold">99.7% Accurate</span>
+              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Muzzle-ID Recognition</span>
+              <span className={`text-sm font-semibold ${darkMode ? 'text-green-400' : 'text-green-600'}`}>99.7% Accurate</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">Spatial AI Processing</span>
-              <span className="text-green-600 text-sm font-semibold">Active</span>
+              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Spatial AI Processing</span>
+              <span className={`text-sm font-semibold ${darkMode ? 'text-green-400' : 'text-green-600'}`}>Active</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">Acoustic AI Monitoring</span>
-              <span className="text-green-600 text-sm font-semibold">Active</span>
+              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Acoustic AI Monitoring</span>
+              <span className={`text-sm font-semibold ${darkMode ? 'text-green-400' : 'text-green-600'}`}>Active</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">Offline TinyML Mode</span>
-              <span className="text-blue-600 text-sm font-semibold">Available</span>
+              <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Offline TinyML Mode</span>
+              <span className={`text-sm font-semibold ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>Available</span>
             </div>
           </div>
         </div>

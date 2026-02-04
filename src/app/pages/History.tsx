@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router";
 import { ChevronLeft, Calendar, TrendingUp, AlertCircle, CheckCircle, Volume2, Download, FileText } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { useSettings } from "@/contexts/SettingsContext";
+import { getTranslations, type LanguageCode } from "@/utils/translations";
 
 interface HealthLog {
   id: string;
@@ -79,19 +81,21 @@ const mockLogs: HealthLog[] = [
 export default function History() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { darkMode, selectedLanguage } = useSettings();
+  const t = getTranslations(selectedLanguage as LanguageCode);
   const [activeTab, setActiveTab] = useState<"logs" | "trends">("logs");
   const cattleId = searchParams.get("cattleId");
 
   const getModeColor = (mode: HealthLog["mode"]) => {
     switch (mode) {
       case "muzzle":
-        return "bg-blue-100 text-blue-700 border-blue-200";
+        return darkMode ? "bg-blue-900 text-blue-300 border-blue-700" : "bg-blue-100 text-blue-700 border-blue-200";
       case "spatial":
-        return "bg-purple-100 text-purple-700 border-purple-200";
+        return darkMode ? "bg-purple-900 text-purple-300 border-purple-700" : "bg-purple-100 text-purple-700 border-purple-200";
       case "audio":
-        return "bg-green-100 text-green-700 border-green-200";
+        return darkMode ? "bg-green-900 text-green-300 border-green-700" : "bg-green-100 text-green-700 border-green-200";
       default:
-        return "bg-yellow-100 text-yellow-700 border-yellow-200";
+        return darkMode ? "bg-yellow-900 text-yellow-300 border-yellow-700" : "bg-yellow-100 text-yellow-700 border-yellow-200";
     }
   };
 
@@ -206,27 +210,27 @@ Hardware-less Livestock Monitoring
   };
 
   return (
-    <div className="min-h-screen bg-[#F9F8F4]">
+    <div className={`min-h-screen pb-24 ${darkMode ? 'bg-gray-900' : 'bg-[#F9F8F4]'} transition-colors`}>
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
+      <header className={`shadow-sm sticky top-0 z-10 ${darkMode ? 'bg-gray-800' : 'bg-white'} transition-colors`}>
         <div className="max-w-lg mx-auto px-6 py-4">
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate(cattleId ? "/cattle" : "/")}
-              className="text-gray-600 hover:text-[#2D5A27]"
+              className={darkMode ? 'text-gray-400 hover:text-green-400' : 'text-gray-600 hover:text-[#2D5A27]'}
             >
               <ChevronLeft size={24} />
             </button>
             <div className="flex-1">
-              <h1 className="text-2xl text-[#2D5A27]">Health History</h1>
-              <p className="text-sm text-gray-600">
-                {cattleId ? "Lakshmi (Gir)" : "All Cattle"}
+              <h1 className={`text-2xl ${darkMode ? 'text-green-400' : 'text-[#2D5A27]'}`}>{t.history.title}</h1>
+              <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                {cattleId ? "Lakshmi (Gir)" : t.history.allCattle}
               </p>
             </div>
             <button
               onClick={downloadAllReports}
               className="bg-gradient-to-r from-[#BFA34B] to-[#8E7932] text-white p-2 rounded-lg hover:shadow-lg transition-all"
-              title="Download All Reports"
+              title={t.history.download}
             >
               <Download size={20} />
             </button>
@@ -236,13 +240,13 @@ Hardware-less Livestock Monitoring
 
       {/* Tabs */}
       <div className="max-w-lg mx-auto px-6 py-4">
-        <div className="flex gap-2 bg-white rounded-xl p-1 shadow-sm">
+        <div className={`flex gap-2 rounded-xl p-1 shadow-sm ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
           <button
             onClick={() => setActiveTab("logs")}
             className={`flex-1 py-2 px-4 rounded-lg transition-all ${
               activeTab === "logs"
                 ? "bg-[#2D5A27] text-white"
-                : "text-gray-600 hover:bg-gray-50"
+                : darkMode ? "text-gray-400 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-50"
             }`}
           >
             <div className="flex items-center justify-center gap-2">
@@ -255,7 +259,7 @@ Hardware-less Livestock Monitoring
             className={`flex-1 py-2 px-4 rounded-lg transition-all ${
               activeTab === "trends"
                 ? "bg-[#2D5A27] text-white"
-                : "text-gray-600 hover:bg-gray-50"
+                : darkMode ? "text-gray-400 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-50"
             }`}
           >
             <div className="flex items-center justify-center gap-2">
@@ -273,13 +277,15 @@ Hardware-less Livestock Monitoring
             {mockLogs.map((log) => (
               <div
                 key={log.id}
-                className="bg-white rounded-2xl shadow-md overflow-hidden"
+                className={`rounded-2xl shadow-md overflow-hidden ${darkMode ? 'bg-gray-800' : 'bg-white'}`}
               >
                 {/* Header */}
-                <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-5 py-3 flex items-center justify-between border-b border-gray-200">
+                <div className={`px-5 py-3 flex items-center justify-between border-b ${
+                  darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200'
+                }`}>
                   <div>
-                    <div className="text-sm font-semibold text-gray-900">{log.date}</div>
-                    <div className="text-xs text-gray-600">{log.time}</div>
+                    <div className={`text-sm font-semibold ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>{log.date}</div>
+                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{log.time}</div>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className={`px-3 py-1 rounded-full text-xs border ${getModeColor(log.mode)}`}>
@@ -294,7 +300,7 @@ Hardware-less Livestock Monitoring
                     </button>
                     <button
                       onClick={() => downloadReport(log, 'csv')}
-                      className="text-[#2D5A27] hover:text-[#3d7a35]"
+                      className={darkMode ? 'text-green-400 hover:text-green-300' : 'text-[#2D5A27] hover:text-[#3d7a35]'}
                       title="Download CSV"
                     >
                       <Download size={20} />
@@ -306,13 +312,13 @@ Hardware-less Livestock Monitoring
                 <div className="p-5">
                   {/* Health Score */}
                   <div className="mb-4 flex items-center justify-between">
-                    <span className="text-gray-600 text-sm">Overall Health Score</span>
+                    <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Overall Health Score</span>
                     <span className={`text-3xl font-bold ${
                       log.healthScore >= 90
-                        ? "text-green-600"
+                        ? darkMode ? "text-green-400" : "text-green-600"
                         : log.healthScore >= 75
-                        ? "text-yellow-600"
-                        : "text-red-600"
+                        ? darkMode ? "text-yellow-400" : "text-yellow-600"
+                        : darkMode ? "text-red-400" : "text-red-600"
                     }`}>
                       {log.healthScore}
                     </span>
@@ -320,17 +326,17 @@ Hardware-less Livestock Monitoring
 
                   {/* Metrics Grid */}
                   <div className="grid grid-cols-3 gap-3 mb-4">
-                    <div className="bg-blue-50 rounded-lg p-3">
-                      <div className="text-xs text-gray-600 mb-1">Rumination</div>
-                      <div className="text-lg font-bold text-blue-700">{log.rumination}%</div>
+                    <div className={`rounded-lg p-3 ${darkMode ? 'bg-blue-900/50' : 'bg-blue-50'}`}>
+                      <div className={`text-xs mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Rumination</div>
+                      <div className={`text-lg font-bold ${darkMode ? 'text-blue-400' : 'text-blue-700'}`}>{log.rumination}%</div>
                     </div>
-                    <div className="bg-green-50 rounded-lg p-3">
-                      <div className="text-xs text-gray-600 mb-1">Respiratory</div>
-                      <div className="text-lg font-bold text-green-700">{log.respiratoryHealth}%</div>
+                    <div className={`rounded-lg p-3 ${darkMode ? 'bg-green-900/50' : 'bg-green-50'}`}>
+                      <div className={`text-xs mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Respiratory</div>
+                      <div className={`text-lg font-bold ${darkMode ? 'text-green-400' : 'text-green-700'}`}>{log.respiratoryHealth}%</div>
                     </div>
-                    <div className="bg-red-50 rounded-lg p-3">
-                      <div className="text-xs text-gray-600 mb-1">Pain</div>
-                      <div className="text-lg font-bold text-red-700">{log.painIndicators}</div>
+                    <div className={`rounded-lg p-3 ${darkMode ? 'bg-red-900/50' : 'bg-red-50'}`}>
+                      <div className={`text-xs mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Pain</div>
+                      <div className={`text-lg font-bold ${darkMode ? 'text-red-400' : 'text-red-700'}`}>{log.painIndicators}</div>
                     </div>
                   </div>
 
@@ -340,33 +346,39 @@ Hardware-less Livestock Monitoring
                       {log.alerts.map((alert, idx) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-2 bg-yellow-50 border border-yellow-200 rounded-lg p-3"
+                          className={`flex items-start gap-2 rounded-lg p-3 ${
+                            darkMode ? 'bg-yellow-900/50 border border-yellow-700' : 'bg-yellow-50 border border-yellow-200'
+                          }`}
                         >
-                          <AlertCircle size={16} className="text-yellow-600 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-yellow-800">{alert}</span>
+                          <AlertCircle size={16} className={`mt-0.5 flex-shrink-0 ${darkMode ? 'text-yellow-400' : 'text-yellow-600'}`} />
+                          <span className={`text-sm ${darkMode ? 'text-yellow-300' : 'text-yellow-800'}`}>{alert}</span>
                         </div>
                       ))}
                     </div>
                   )}
 
                   {/* Notes */}
-                  <div className="flex items-start gap-2 bg-gray-50 rounded-lg p-3">
-                    <CheckCircle size={16} className="text-[#2D5A27] mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">{log.notes}</span>
+                  <div className={`flex items-start gap-2 rounded-lg p-3 ${darkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                    <CheckCircle size={16} className={`mt-0.5 flex-shrink-0 ${darkMode ? 'text-green-400' : 'text-[#2D5A27]'}`} />
+                    <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{log.notes}</span>
                   </div>
 
                   {/* Download Options */}
-                  <div className="mt-4 pt-4 border-t border-gray-200 flex gap-2">
+                  <div className={`mt-4 pt-4 flex gap-2 ${darkMode ? 'border-t border-gray-700' : 'border-t border-gray-200'}`}>
                     <button
                       onClick={() => downloadReport(log, 'csv')}
-                      className="flex-1 bg-green-50 hover:bg-green-100 text-green-700 py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all text-sm"
+                      className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all text-sm ${
+                        darkMode ? 'bg-green-900/50 hover:bg-green-900 text-green-300' : 'bg-green-50 hover:bg-green-100 text-green-700'
+                      }`}
                     >
                       <FileText size={16} />
                       <span>Download CSV</span>
                     </button>
                     <button
                       onClick={() => downloadReport(log, 'pdf')}
-                      className="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all text-sm"
+                      className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all text-sm ${
+                        darkMode ? 'bg-blue-900/50 hover:bg-blue-900 text-blue-300' : 'bg-blue-50 hover:bg-blue-100 text-blue-700'
+                      }`}
                     >
                       <Download size={16} />
                       <span>Download Report</span>
@@ -381,8 +393,8 @@ Hardware-less Livestock Monitoring
         {activeTab === "trends" && (
           <div className="space-y-6">
             {/* Chart Card */}
-            <div className="bg-white rounded-2xl shadow-md p-5">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Health Indicators (7 Days)</h3>
+            <div className={`rounded-2xl shadow-md p-5 ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+              <h3 className={`text-lg font-semibold mb-4 ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>Health Indicators (7 Days)</h3>
               
               <div className="h-64 mb-4">
                 <ResponsiveContainer width="100%" height="100%">
